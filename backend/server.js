@@ -12,7 +12,10 @@ const Alert = require("./models/Alert");
 const {encrypt} =require("./config/encryption");
 const app = express();
 
-app.use(cors({origin: '*'}));
+app.use(cors({
+  origin: 'https://weather-app-clerk.vercel.app/', 
+  credentials: true,               
+}));
 app.use(express.json());
 
 // Connect to MongoDB

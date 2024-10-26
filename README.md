@@ -50,7 +50,7 @@
   AES_SECRET_KEY=put a secret key of your choice
   SECRET_TOKEN = put a secret token of your choice
   MONGO_STRING= Put your MongoDb string
-  API_KEY= Insert Weather.org Api key from its website
+  API_KEY= Insert openweathermap.org Api key from its website
   USER= Put the gmail id that you want to use to send the emails to users for alerts
   PASS= App password for that gmail account
    ```

@@ -67,7 +67,7 @@
 
 ## Things to Keep in Mind
 1. Change the cors configuration in the server.js while using it in local.
-2. Create a webhook in the clerk project settings with production server link/webhook/create and also set the token in custom headers 
+2. Create a webhook in the clerk project settings with production server link/webhook/users and also set the token in custom headers 
  in advanced settings and set it as your SECRET_TOKEN set as your environment variable. Select the user.created event.
  ![image](https://github.com/user-attachments/assets/1159c4fd-df28-4ebb-ad0f-ea8214b9a2d0)
 

@@ -178,22 +178,41 @@ const convertTemperature = (celsius) => {
       }
     };
 
+    // const fetchUserAlerts = async () => {
+    //   try {
+    //     console.log(user.id);
+    //     const response = await axios.post(`${API_BASE_URL}/api/users/alerts`, { userId: user });
+    //     console.log(response);
+    //     setAlerts(response.data);
+    //   } catch (error) {
+    //     console.error('Error fetching user alerts:', error);
+    //   }
+    // };
+
+    fetchCurrentWeather();
+    fetchWeatherHistory();
+    // fetchUserAlerts();
+    fetchDailySummery();
+    
+  }, [selectedCityId]); 
+
+  useEffect(() => {
     const fetchUserAlerts = async () => {
       try {
-        const response = await axios.post(`${API_BASE_URL}/api/users/alerts`, { userId: user.id });
-        console.log(response);
-        setAlerts(response.data);
+        if (isLoaded && user) { 
+          // console.log(user.id)
+          const response = await axios.post(`${API_BASE_URL}/api/users/alerts`, { userId: user.id });
+          setAlerts(response.data);
+        }
       } catch (error) {
         console.error('Error fetching user alerts:', error);
       }
     };
-
-    fetchCurrentWeather();
-    fetchWeatherHistory();
-    if(isSignedIn){fetchUserAlerts();}
-    fetchDailySummery();
-    
-  }, [selectedCityId]); 
+  
+    if (isSignedIn) {
+      fetchUserAlerts();
+    }
+  }, [isLoaded, isSignedIn, user, selectedCityId]);
   
 
   const CustomLineChart = ({ data, width = 730, height = 250 }) => {

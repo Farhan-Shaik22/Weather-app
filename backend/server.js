@@ -13,7 +13,7 @@ const {encrypt} =require("./config/encryption");
 const app = express();
 
 app.use(cors({
-  origin: 'https://weather-app-clerk.vercel.app/', 
+  origin: 'https://weather-app-clerk.vercel.app', 
   credentials: true,               
 }));
 app.use(express.json());

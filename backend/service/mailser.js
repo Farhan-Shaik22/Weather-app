@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const config = require('../config/config');
-
+require('dotenv').config();
 class EmailService {
   constructor() {
     this.transporter = nodemailer.createTransport({

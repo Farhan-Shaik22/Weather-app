@@ -13,11 +13,10 @@ const {encrypt} =require("./config/encryption");
 const app = express();
 require('dotenv').config();
 app.use(cors({
-  origin: 'https://weather-app-clerk.vercel.app', 
+  origin: '*', 
   credentials: true,               
 }));
 app.use(express.json());
-
 // Connect to MongoDB
 mongoose.connect(config.mongoUri)
   .then(() => console.log('Connected to MongoDB'))
@@ -33,11 +32,10 @@ app.post('/api/weather', async (req, res) => {
     const { cityId } = req.body; 
     const{date}=req.body;
     const data = await WeatherData.findOne({ cityId:cityId, date:date });
-    // console.log(data);
     const curdata = data.updates[data.updates.length-1];
     res.json(curdata);
   } catch (error) {
-    // console.log(error)
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 });

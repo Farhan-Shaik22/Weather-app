@@ -2,6 +2,7 @@ const axios = require('axios');
 const cron = require('node-cron');
 const config = require('../config/config');
 const WeatherData = require('../models/CurWeather');
+require('dotenv').config();
 const getISTDateTime = () => {
   const now = new Date();
   now.setMinutes(now.getMinutes() + 330); //
@@ -15,9 +16,10 @@ class WeatherService {
   constructor() {
     this.apiKey = config.openWeatherApiKey;
   }
-
+  
   async fetchWeatherData(cityId) {
     try {
+      
       const response = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=${this.apiKey}`
       );

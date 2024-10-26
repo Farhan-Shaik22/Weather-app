@@ -91,30 +91,60 @@ const convertTemperature = (celsius) => {
     const istString = yesterday.toLocaleString("en-IN", istOptions);
     return istString;
   };
+  const getCurrentDateWithCheck = () => {
+    // Get current time in IST
+    const now = new Date();
+    const istTime = now.toLocaleString("en-IN", { 
+      timeZone: "Asia/Kolkata",
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+    
+    // Parse hours and minutes
+    const [hours, minutes] = istTime.split(':').map(Number);
+    
+    // Check if time is between 00:00 and 00:06
+    const isInMaintenanceWindow = hours === 0 && minutes >= 0 && minutes <= 6;
+    
+    // Get date string based on the check
+    if (isInMaintenanceWindow) {
+      const yesterday = new Date(now - 24 * 60 * 60 * 1000);
+      return yesterday.toLocaleString("en-IN", { 
+        timeZone: "Asia/Kolkata",
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).split(',')[0].split('/').reverse().join('-');
+    }
+  
+    // Return current date if not in maintenance window
+    return now.toLocaleString("en-IN", { 
+      timeZone: "Asia/Kolkata" 
+    }).split(',')[0].split('/').reverse().join('-');
+  };
+  
 
   useEffect(() => {
     const fetchCurrentWeather = async () => {
       try {
-        const datee= (new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).split(',')[0]).split('/').reverse().join('-') ;
-        console.log(datee);
+        const datee = getCurrentDateWithCheck();
         const response = await axios.post(`${API_BASE_URL}/api/weather`, { cityId: selectedCityId, date: datee });
-        console.log(response);
         setCurrentWeather(response.data);
       } catch (error) {
         console.error('Error fetching current weather:', error);
       }
     };
-
+  
     const fetchWeatherHistory = async () => {
       try {
-        const datee= (new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).split(',')[0]).split('/').reverse().join('-');
-        const response = await axios.post(`${API_BASE_URL}/api/hourlyweather`, { cityId: selectedCityId,date:datee });
-        const dat= response.data;
-        console.log(dat);
-        const updatedweatherhist=dat.map((item) => {
+        const datee = getCurrentDateWithCheck();
+        const response = await axios.post(`${API_BASE_URL}/api/hourlyweather`, { cityId: selectedCityId, date: datee });
+        const dat = response.data;
+        const updatedweatherhist = dat.map((item) => {
           return {
             ...item,
-            temperature:item.temperature.toFixed(2),
+            temperature: item.temperature.toFixed(2),
             timestamp: new Date(item.timestamp).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).split(',')[1] 
           };
         });
@@ -123,12 +153,15 @@ const convertTemperature = (celsius) => {
         console.error('Error fetching weather history:', error);
       }
     };
-
+  
     const fetchDailySummery = async () => {
       try {
         const datee= (getYesterdayIST().split(',')[0]).split('/').reverse().join('-');
+        // console.log(datee);
+        // console.log(selectedCityId);
         const response = await axios.post(`${API_BASE_URL}/api/summary`, { cityId: selectedCityId,date:datee });
         const dat= response.data;
+        
         const weathersummery = {
           ...dat,
           avgTemperature: dat.avgTemperature.toFixed(2),
@@ -139,7 +172,7 @@ const convertTemperature = (celsius) => {
           dominantWeatherCondition: dat.dominantWeatherCondition.toUpperCase(),
         };
         setWeatherSum(weathersummery);
-        console.log(weathersummery)
+        // console.log(weathersummery)
       } catch (error) {
         console.error('Error fetching weather summery:', error);
       }
@@ -147,7 +180,7 @@ const convertTemperature = (celsius) => {
 
     const fetchUserAlerts = async () => {
       try {
-        const response = await axios.post(`${API_BASE_URL}/api/users/alerts`, { userId: 'user123' });
+        const response = await axios.post(`${API_BASE_URL}/api/users/alerts`, { userId: user.id });
         console.log(response);
         setAlerts(response.data);
       } catch (error) {
@@ -157,7 +190,7 @@ const convertTemperature = (celsius) => {
 
     fetchCurrentWeather();
     fetchWeatherHistory();
-    fetchUserAlerts();
+    if(isSignedIn){fetchUserAlerts();}
     fetchDailySummery();
     
   }, [selectedCityId]); 

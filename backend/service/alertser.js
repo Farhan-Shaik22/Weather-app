@@ -4,7 +4,7 @@ const Alert = require('../models/Alert');
 const WeatherUser = require('../models/weatheruser');
 const emailService = require('./mailser');
 const config = require('../config/config');
-
+require('dotenv').config();
 class ThresholdService {
   isValidThresholdType(type) {
     const validTypes = ['temperature', 'humidity', 'windSpeed','feelsLike'];

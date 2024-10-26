@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const WeatherData = require('../models/CurWeather');
 const DailySummary = require('../models/DailySum');
 const config = require('../config/config');
-
+require('dotenv').config();
 class SummaryService {
   async calculateDailySummary(cityId, date) {
     // Format the date as YYYY-MM-DD to match the document structure
@@ -73,12 +73,17 @@ class SummaryService {
   
 
   startScheduler() {
-    // Schedule the job to run at 00:01 every day (1 minute after midnight)
-    cron.schedule('15 0 * * *', async () => {
-      console.log('Calculating daily summaries...');
-      await this.updateDailySummaries();
-    });
-  }
+    cron.schedule(
+      '1 0 * * *', 
+      async () => {
+        console.log('Calculating daily summaries at midnight IST...');
+        await this.updateDailySummaries();
+      },
+      {
+        timezone: 'Asia/Kolkata' 
+      }
+    );
+  }  
 }
 
 module.exports = new SummaryService();

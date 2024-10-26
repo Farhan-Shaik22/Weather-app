@@ -34,7 +34,7 @@ class ThresholdService {
         }
 
         const value = weatherData[threshold.type];
-        
+        // console.log(value)
         if (value === undefined) {
           console.error(`Weather data doesn't contain ${threshold.type}`);
           continue;
@@ -70,13 +70,15 @@ class ThresholdService {
               threshold: threshold.value,
               timestamp: new Date() // Add timestamp for alert creation
             });
+            // console.log("hello")
             await WeatherUser.updateOne(
               { userId: user.userId, 'thresholds._id': threshold._id },
-              { $inc: { 'thresholds.$.emailsent': 1 } }
+              { $inc: { 'thresholds.$.sent': 1 } }
             );
+            // console.log("hello2")
             await emailService.sendAlertEmail(user.email, alert);
           } catch (error) {
-            console.error('Failed to create alert or send email:', error);
+            console.log('Failed to create alert or send email:', error);
           }
         }
       }
@@ -102,9 +104,10 @@ class ThresholdService {
 
       for (const city of cities) {
         const latestWeather = await WeatherData.findOne({ cityId: city.id })
-          .sort({ timestamp: -1 })
-          .lean();
-          
+        .sort({ date: -1 }) 
+        .limit(1) 
+        .lean();
+        // console.log(latestWeather)
         if (!latestWeather) {
           console.log(`No weather data found for city ${city.id}`);
           continue;
@@ -112,7 +115,7 @@ class ThresholdService {
 
         for (const user of users) {
           try {
-            await this.checkThresholdsForUser(user, city.id, latestWeather.updates[latestWeather.updates.length-1],latestWeather.cityName);
+            await this.checkThresholdsForUser(user, city.id, latestWeather.updates.at(-1),latestWeather.cityName);
           } catch (error) {
             console.error(`Failed to check thresholds for user ${user.userId}:`, error);
           }

@@ -10,7 +10,6 @@ const getISTTimestamp = () => {
 
 const thresholdSchema = new mongoose.Schema({
   type: String,
-  emailsent: Number, 
   value: Number,
   cityId: Number,
   operator: String,

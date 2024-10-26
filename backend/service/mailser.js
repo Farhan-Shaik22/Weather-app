@@ -22,7 +22,7 @@ class EmailService {
         break;
       case "greater than":
         conditionMessage = "exceeded";
-        emoji="🥵"
+        emoji="☀️"
         break;
       case "equal to":
         conditionMessage = "reached";

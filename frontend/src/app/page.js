@@ -397,6 +397,7 @@ const convertTemperature = (celsius) => {
         <AlertModal 
           isOpen={isAlertModalOpen} 
           onClose={() => setIsAlertModalOpen(false)}
+          userId={user.id}
         />
       )}
     </div>

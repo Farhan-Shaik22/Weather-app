@@ -4,7 +4,7 @@ import axios from 'axios';
 import parameters from '../../../public/parameters';
 import cities from '../../../public/cities';
 
-const AlertModal = ({ isOpen, onClose, userId="user123" }) => {
+const AlertModal = ({ isOpen, onClose, userId }) => {
   const [thresholds, setThresholds] = useState([]);
   const [parameter, setParameter] = useState(parameters[0].id);
   const [cityid,setCityid] =useState(cities[0].id);

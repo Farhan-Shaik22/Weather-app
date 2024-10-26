@@ -6,14 +6,14 @@ import {SignedIn, SignedOut, UserButton} from '@clerk/nextjs'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
+  
   return (
     <div className="z-50 relative flex justify-center w-full p-4 bg-transparent">
-      <div className="relative w-full max-w-5xl bg-white border border-gray-200 rounded-full shadow-sm backdrop-blur-md bg-opacity-20">
+      <div className="relative w-full max-w-7xl bg-white border border-gray-200 rounded-full shadow-sm backdrop-blur-md bg-opacity-20">
         <div className="mx-auto flex items-center justify-between px-10 py-2">
           <div className="inline-flex items-center space-x-2">
             <Link href="/">
-            <span className="font-bold text-lg text-black">WEATHER APP</span>
+            <span className="font-bold text-2xl text-black">WEATHER APP</span>
             </Link>
           </div>
           <div className="hidden md:block">
@@ -21,18 +21,18 @@ export default function Navbar() {
               <SignedOut>
               <li>
                 <Link href="/sign-in">
-                  <div className="text-base font-medium text-black hover:text-gray-500">Sign In</div>
+                  <div className="text-xl font-medium text-black hover:text-gray-500">Sign In</div>
                 </Link>
               </li>
               <li>
                 <Link href="/sign-up">
-                  <div className="text-base font-medium text-black hover:text-gray-500">Sign Up</div>
+                  <div className="text-xl font-medium text-black hover:text-gray-500">Sign Up</div>
                 </Link>
               </li>
               </SignedOut>
               <SignedIn>
               <li className="flex justify-center">
-                <UserButton></UserButton>
+                <UserButton showName="true"></UserButton>
               </li>
               </SignedIn>
             </ul>

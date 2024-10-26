@@ -6,13 +6,11 @@ const emailService = require('./mailser');
 const config = require('../config/config');
 
 class ThresholdService {
-  // Validate threshold type against allowed values
   isValidThresholdType(type) {
-    const validTypes = ['temperature', 'humidity', 'windSpeed'];
+    const validTypes = ['temperature', 'humidity', 'windSpeed','feelsLike'];
     return validTypes.includes(type);
   }
 
-  // Validate operator against allowed values
   isValidOperator(operator) {
     const validOperators = ['greater than', 'less than', 'equal to'];
     return validOperators.includes(operator);
@@ -20,8 +18,6 @@ class ThresholdService {
 
   async checkThresholdsForUser(user, cityId, weatherData,city) {
     try {
-      // Validate input parameters
-      // console.log(weatherData);
       if (!user || !cityId || !weatherData) {
         throw new Error('Missing required parameters');
       }
@@ -29,21 +25,20 @@ class ThresholdService {
       const cityThresholds = user.thresholds.filter(t => t.cityId === cityId);
       
       for (const threshold of cityThresholds) {
-        // Validate threshold type
         if (!this.isValidThresholdType(threshold.type)) {
           console.error(`Invalid threshold type: ${threshold.type}`);
+          continue;
+        }
+        if(threshold.sent==2){
           continue;
         }
 
         const value = weatherData[threshold.type];
         
-        // Check if weather data contains the threshold type
         if (value === undefined) {
           console.error(`Weather data doesn't contain ${threshold.type}`);
           continue;
         }
-
-        // Validate operator
         if (!this.isValidOperator(threshold.operator)) {
           console.error(`Invalid operator: ${threshold.operator}`);
           continue;
@@ -62,7 +57,6 @@ class ThresholdService {
             conditionMet = value === threshold.value;
             break;
         }
-        // console.log(city);
         if (conditionMet) {
           try {
             const alert = await Alert.create({
@@ -76,17 +70,19 @@ class ThresholdService {
               threshold: threshold.value,
               timestamp: new Date() // Add timestamp for alert creation
             });
-
-            // await emailService.sendAlertEmail(user.email, alert);
+            await WeatherUser.updateOne(
+              { userId: user.userId, 'thresholds._id': threshold._id },
+              { $inc: { 'thresholds.$.emailsent': 1 } }
+            );
+            await emailService.sendAlertEmail(user.email, alert);
           } catch (error) {
             console.error('Failed to create alert or send email:', error);
-            // Continue processing other thresholds even if one fails
           }
         }
       }
     } catch (error) {
       console.error(`Error in checkThresholdsForUser for user ${user.userId}:`, error);
-      throw error; // Propagate error to caller
+      throw error;
     }
   }
 
@@ -116,22 +112,18 @@ class ThresholdService {
 
         for (const user of users) {
           try {
-            // console.log(latestWeather);
             await this.checkThresholdsForUser(user, city.id, latestWeather.updates[latestWeather.updates.length-1],latestWeather.cityName);
           } catch (error) {
             console.error(`Failed to check thresholds for user ${user.userId}:`, error);
-            // Continue processing other users even if one fails
           }
         }
       }
     } catch (error) {
       console.error('Failed to check thresholds:', error);
-      // You might want to add monitoring/alerting here for production
     }
   }
 
   startScheduler() {
-    // Validate cron expression
     if (!cron.validate('*/5 * * * *')) {
       throw new Error('Invalid cron expression');
     }

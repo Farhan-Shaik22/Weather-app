@@ -13,7 +13,8 @@ const thresholdSchema = new mongoose.Schema({
   emailsent: Number, 
   value: Number,
   cityId: Number,
-  operator: String
+  operator: String,
+  sent: Number
 });
 
 const weatherUserSchema = new mongoose.Schema({

@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const config = {
-  mongoUri: 'mongodb://localhost:27017/weather-monitoring',
-  openWeatherApiKey: '1be9d606dafceeeccecf1b07623b8419',
+  mongoUri: process.env.MONGO_STRING,
+  openWeatherApiKey: process.env.API_KEY,
   cities: [
     { name: 'Delhi', id: 1273294 },
     { name: 'Mumbai', id: 1275339 },
@@ -11,8 +13,8 @@ const config = {
   ],
   email: {
     service: 'gmail',
-    user: '21bd1a661qcsma@gmail.com',
-    password: 'tnay sjue ylvx tpoq'
+    user: process.env.USER,
+    password: process.env.PASS
   },
 };
 

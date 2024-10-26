@@ -44,7 +44,7 @@ class EmailService {
           <li>Type: ${alertData.type}</li>
           <li>Current Value: ${alertData.value.toFixed(1)}</li>
           <li>Your Threshold: ${alertData.threshold}</li>
-          <li>Time: ${new Date(alertData.timestamp).toLocaleString()}</li>
+          <li>Time: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</li>
         </ul>
       `
     };

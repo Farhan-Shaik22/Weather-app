@@ -2,13 +2,14 @@ const axios = require('axios');
 const cron = require('node-cron');
 const config = require('../config/config');
 const WeatherData = require('../models/CurWeather');
-const getISTDate = () => {
+const getISTDateTime = () => {
   const now = new Date();
-  const utcOffset = now.getTime() + now.getTimezoneOffset() * 60000; // Convert to UTC
-  const istOffset = 5.5 * 3600000; // IST is UTC +5:30
-  const istTime = new Date(utcOffset + istOffset); // Get IST time
-  return istTime.toISOString().slice(0, 10); // Format as YYYY-MM-DD
+  now.setMinutes(now.getMinutes() + 330); //
+  const istISOString = now.toISOString().replace('Z', '+05:30');
+  return istISOString;
 };
+
+
 
 class WeatherService {
   constructor() {
@@ -27,7 +28,7 @@ class WeatherService {
         humidity: response.data.main.humidity,
         windSpeed: response.data.wind.speed,
         weatherCondition: response.data.weather[0].main,
-        timestamp: new Date() // Include a timestamp for each update
+        timestamp: getISTDateTime()
       };
     } catch (error) {
       console.error(`Error fetching weather data for city ${cityId}:`, error);
@@ -36,12 +37,12 @@ class WeatherService {
   }
 
   async updateWeatherData() {
-    const currentDate = getISTDate();; // Get current date (YYYY-MM-DD)
-
+    const currentDate = getISTDateTime().split('T')[0]; // Get current date (YYYY-MM-DD)
+    console.log(currentDate);
     for (const city of config.cities) {
       try {
         const weatherData = await this.fetchWeatherData(city.id);
-
+        
         // Find the existing record for the current day and city
         const weatherRecord = await WeatherData.findOne({
           cityId: city.id,

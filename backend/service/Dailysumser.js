@@ -74,7 +74,7 @@ class SummaryService {
 
   startScheduler() {
     // Schedule the job to run at 00:01 every day (1 minute after midnight)
-    cron.schedule('17 3 * * *', async () => {
+    cron.schedule('15 0 * * *', async () => {
       console.log('Calculating daily summaries...');
       await this.updateDailySummaries();
     });

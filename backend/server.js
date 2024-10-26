@@ -11,7 +11,7 @@ const DailySummary = require("./models/DailySum");
 const Alert = require("./models/Alert");
 const {encrypt} =require("./config/encryption");
 const app = express();
-
+require('dotenv').config();
 app.use(cors({
   origin: 'https://weather-app-clerk.vercel.app/', 
   credentials: true,               

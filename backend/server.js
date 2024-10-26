@@ -68,7 +68,8 @@ app.post('/api/summary', async (req, res) => {
 // API endpoint to create a user (POST)
 app.post('/webhook/users', async (req, res) => {
   try {
-    const {data, token} = req.body; 
+    const {data} = req.body; 
+    const {token}= req.headers;
     if(token!=process.env.SECRET_TOKEN){
       return res.status(400).send({ error: "Invalid Token" });
     }

@@ -39,7 +39,7 @@ class EmailService {
       subject: `Weather Alert for ${alertData.cityName} `,
       html: `
         <h2>Weather Alert</h2>
-        <p>A weather threshold has been ${conditionMessage} in ${alertData.cityName} ${emoji}:</p>
+        <p>A weather threshold has been ${conditionMessage} ${alertData.threshold} in ${alertData.cityName} ${emoji}:</p>
         <ul>
           <li>Type: ${alertData.type}</li>
           <li>Current Value: ${alertData.value.toFixed(1)}</li>

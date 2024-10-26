@@ -216,7 +216,7 @@ const convertTemperature = (celsius) => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6">
+    <div className="w-full min-h-screen  text-white p-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
         <Card className="col-span-1 md:col-span-4">
           <div className="flex flex-row items-center gap-4">

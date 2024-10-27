@@ -182,9 +182,10 @@ const AlertModal = ({ isOpen, onClose, userId }) => {
                 <button
                   onClick={() => handleDeleteThreshold(threshold._id)}
                   disabled={loading}
-                  className="text-red-500 hover:text-red-600 transition-colors disabled:opacity-50"
+                  className="text-white transition-colors disabled:opacity-50 rounded-full bg-red-500 hover:bg-red-700 px-3 py-1"
                 >
-                  <X className="h-6 w-6" />
+                  {/* <X className="h-6 w-6" /> */}
+                  Delete
                 </button>
               </div>
             ))}

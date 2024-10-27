@@ -8,16 +8,46 @@ import getWeatherIcon from './_components/ConditionIcon';
 import { Plus, AlertTriangle } from 'lucide-react';
 import AlertModal from './_components/AlertModal';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { motion } from 'framer-motion'; // Import Framer Motion
 
 const words = [
   { id: 'greater than', label: 'exceeded' },
   { id: 'less than', label: 'dropped below' },
   { id: 'equal to', label: 'Equal to' }
 ];
+
+const containerVariants = {
+  hidden: { opacity: 0.5 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.20,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20, x: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    x: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15,
+    },
+  },
+};
+
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/10 ${className}`}>
+  <motion.div
+    className={`bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/10 ${className}`}
+    variants={itemVariants}
+  >
     {children}
-  </div>
+  </motion.div>
 );
 
 const Button = ({ children, onClick, className = '' }) => (
@@ -268,8 +298,14 @@ const convertTemperature = (celsius) => {
   };
 
   return (
-    <div className="w-full min-h-screen  text-white p-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
+    <motion.div 
+      className="w-full min-h-screen text-white p-6" 
+      variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+    >
+      <motion.div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
         <Card className="col-span-1 md:col-span-4">
           <div className="flex flex-row items-center gap-4">
             <h2 className="text-2xl font-light">Select City:</h2>
@@ -410,7 +446,7 @@ const convertTemperature = (celsius) => {
             </div>
           )}
         </Card>
-      </div>
+      </motion.div>
       
       {isSignedIn && (
         <AlertModal 
@@ -419,7 +455,7 @@ const convertTemperature = (celsius) => {
           userId={user.id}
         />
       )}
-    </div>
+    </motion.div>
   );
 };
 

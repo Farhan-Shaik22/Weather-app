@@ -245,7 +245,7 @@ const convertTemperature = (celsius) => {
   }, [isLoaded, isSignedIn, user, selectedCityId]);
   
 
-  const CustomLineChart = ({ data, width = 730, height = 250 }) => {
+  const CustomLineChart = ({ data, width = 900, height = 300 }) => {
     return (
       <ResponsiveContainer width="100%" height={height}>
         <AreaChart

@@ -25,12 +25,22 @@ mongoose.connect(config.mongoUri)
 weatherService.startScheduler();
 summaryService.startScheduler();
 thresholdService.startScheduler();
+function formatDate(dateString) {
+  const [year, month, day] = dateString.split('-');
+  
+  // Pad month and day with leading zeros if needed
+  const formattedMonth = month.padStart(2, '0');
+  const formattedDay = day.padStart(2, '0');
+
+  return `${year}-${formattedMonth}-${formattedDay}`;
+}
 
 // API endpoint to get weather data (now POST)
 app.post('/api/weather', async (req, res) => {
   try {
     const { cityId } = req.body; 
-    const{date}=req.body;
+    var{date}=req.body;
+    date = formatDate(date);
     const data = await WeatherData.findOne({ cityId:cityId, date:date });
     const curdata = data.updates[data.updates.length-1];
     res.json(curdata);
@@ -42,8 +52,9 @@ app.post('/api/weather', async (req, res) => {
 
 app.post('/api/hourlyweather', async (req, res) => {
   try {
-    const{date}=req.body;
+    var{date}=req.body;
     const { cityId } = req.body; // Get cityId from body
+    date = formatDate(date);
     const data = await WeatherData.findOne({ cityId:cityId, date:date });
     const curdata = data.updates;
     res.json(curdata);

@@ -110,7 +110,7 @@
 - Enables quick switching between locations.
 
 ### 5. Weather Alert System
-- User-specific weather alerts.
+- User-specific weather alerts **through signed in emails**.
 - Customizable threshold settings:
   - Temperature-based alerts.
   - Supports multiple comparison operators (greater than, less than, equal to).
